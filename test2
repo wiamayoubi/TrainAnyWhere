@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inquiry</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container pt-5">
+    <div class="d-flex flex-column text-center mb-5">
+        <h4 class="text-primary font-weight-bold">Get In Touch</h4>
+        <h4>Email Us For Any Query Or Submit Your Query Here</h4>
+    </div>
+
+    <div class="row px-3 pb-2">
+        <div class="col-sm-4 text-center mb-3">
+            <i class="fa fa-2x fa-map-marker-alt mb-3 text-primary"></i>
+            <h4 class="font-weight-bold">Address</h4>
+            <p>123 Street, El_Koura, Lebanon</p>
+        </div>
+        <div class="col-sm-4 text-center mb-3">
+            <i class="fa fa-2x fa-phone-alt mb-3 text-primary"></i>
+            <h4 class="font-weight-bold">Phone</h4>
+            <p>+961 70123456</p>
+        </div>
+        <div class="col-sm-4 text-center mb-3">
+            <i class="far fa-2x fa-envelope mb-3 text-primary"></i>
+            <h4 class="font-weight-bold">Email</h4>
+            <p>info@example.com</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div>
+            <h1>Gym Contact Details</h1>
+            <div class="row">
+                <div class="col-sm-6 mb-3">
+                    <h2>Kfarhata Gym</h2>
+                    <p><i class="far fa-envelope mb-3 text-primary"></i> kfarhatagym@gmail.com</p>
+                    <p><i class="fa fa-phone-alt mb-3 text-primary"></i> +961 06922911</p>
+                </div>
+                <div class="col-sm-6 mb-3">
+                    <h2>Fitness360 Gym</h2>
+                    <p><i class="far fa-envelope mb-3 text-primary"></i> Fitness360@gmail.com</p>
+                    <p><i class="fa fa-phone-alt mb-3 text-primary"></i> +961 06922922</p>
+                </div>
+                <div class="col-sm-6 mb-3">
+                    <h2>LIU Gym</h2>
+                    <p><i class="far fa-envelope mb-3 text-primary"></i> liugym@gmail.com</p>
+                    <p><i class="fa fa-phone-alt mb-3 text-primary"></i> +961 06922933</p>
+                </div>
+            </div>
+        </div>
+
+        <br><br><br>
+
+        <form action="" method="POST">
+            <label for="inquiry_type">Select Inquiry Type:</label>
+            <select name="inquiry_type" id="inquiry_type">
+                <option value="trainer">Inquiry to Trainer</option>
+                <option value="admin">Inquiry to Administrator</option>
+            </select>
+
+            <div id="trainer_inquiry">
+                <label for="trainer">Select Trainer:</label>
+                <select name="trainer" id="trainer_select">
+                    <?php while ($trainer = mysqli_fetch_assoc($trainers_result)): ?>
+                        <option value="<?php echo $trainer['trainer_id']; ?>"><?php echo htmlspecialchars($trainer['name']); ?></option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+
+            <div id="admin_inquiry" style="display: none;">
+                <label for="admin_type">Select Admin Type:</label>
+                <select name="admin_type" id="admin_type">
+                    <option value="trainer">Trainer</option>
+                    <option value="gym">Gym</option>
+                </select>
+
+                <div id="admin_trainer_select" style="display: none;">
+                    <label for="admin_trainer">Select Trainer:</label>
+                    <select name="admin_trainer" id="admin_trainer">
+                        <?php mysqli_data_seek($trainers_result, 0); // Reset the pointer to fetch trainers again ?>
+                        <?php while ($trainer = mysqli_fetch_assoc($trainers_result)): ?>
+                            <option value="<?php echo $trainer['trainer_id']; ?>"><?php echo htmlspecialchars($trainer['name']); ?></option>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
+
+                <div id="gym_select" style="display: none;">
+                    <label for="gym">Select Gym:</label>
+                    <select name="gym" id="gym">
+                        <?php while ($gym = mysqli_fetch_assoc($gyms_result)): ?>
+                            <option value="<?php echo $gym['gym_id']; ?>"><?php echo htmlspecialchars($gym['name']); ?></option>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
+            </div>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="4" cols="50"></textarea>
+            <input type="submit" value="Submit">
+        </form>
+        <a class="back-link" href="HomePage.php">Back</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('inquiry_type').addEventListener('change', function() {
+        var inquiryType = this.value;
+        if (inquiryType === 'trainer') {
+            document.getElementById('trainer_inquiry').style.display = 'block';
+            document.getElementById('admin_inquiry').style.display = 'none';
+        } else if (inquiryType === 'admin') {
+            document.getElementById('admin_inquiry').style.display = 'block';
+            document.getElementById('trainer_inquiry').style.display = 'none';
+        }
+    });
+    document.getElementById('admin_type').addEventListener('change', function() {
+        var adminType = this.value;
+        if (adminType === 'trainer') {
+            document.getElementById('admin_trainer_select').style.display = 'block';
+            document.getElementById('gym_select').style.display = 'none';
+        } else if (adminType === 'gym') {
+            document.getElementById('gym_select').style.display = 'block';
+            document.getElementById('admin_trainer_select').style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
